@@ -1,4 +1,3 @@
-import 'i18n.dart';
 
 class DateTimeEntity {
   int? year;
@@ -7,7 +6,6 @@ class DateTimeEntity {
   int? hour;
   int? minute;
   int? second;
-  LocaleType locale;
 
   DateTimeEntity({
     this.year,
@@ -16,6 +14,5 @@ class DateTimeEntity {
     this.hour,
     this.minute,
     this.second,
-    this.locale = LocaleType.en,
   });
 }

@@ -10,21 +10,21 @@ typedef OkDateTimePickerValueCallback = void Function(DateTimeEntity dateTime);
 typedef OkDateTimePickerCancelCallback = void Function();
 
 class OkDateTimePicker {
-
   ///
   /// Display DateTime Picker BottomSheet
-  /// Use showItems to Control which items to display
+  /// Use displayItems to Control which items to display
   /// ```dart
   /// OkDateTimePicker.show(
   ///   context,
-  ///   showItems: [DateTimeItem.year, DateTimeItem.month, DateTimeItem.day],
+  ///   displayItems: [DateTimeItem.year, DateTimeItem.month, DateTimeItem.day],
   ///   allowNullItems: [DateTimeItem.year],
   /// );
   /// ```
   /// Using allowNullItems to Control which items can be select null value
   ///
-  static Future<DateTime?> show(BuildContext context, {
-    required List<DateTimeItem> showItems,
+  static Future<DateTime?> show(
+    BuildContext context, {
+    required List<DateTimeItem> displayItems,
     List<DateTimeItem>? allowNullItems,
     DateTime? initialTime,
     DateTime? minTime,
@@ -36,7 +36,7 @@ class OkDateTimePicker {
       context: context,
       builder: (BuildContext context) {
         return OkDateTimePickerWidget(
-          showItems: showItems,
+          displayItems: displayItems,
           allowNullItems: allowNullItems,
           initialTime: initialTime,
           minTime: minTime,
@@ -49,7 +49,7 @@ class OkDateTimePicker {
   }
 
   static Widget builder({
-    required List<DateTimeItem> showItems,
+    required List<DateTimeItem> displayItems,
     List<DateTimeItem>? allowNullItems,
     DateTime? initialTime,
     DateTime? minTime,
@@ -58,7 +58,7 @@ class OkDateTimePicker {
     OkDateTimePickerStyle? style,
   }) {
     return OkDateTimePickerWidget(
-      showItems: showItems,
+      displayItems: displayItems,
       allowNullItems: allowNullItems,
       initialTime: initialTime,
       minTime: minTime,
@@ -74,19 +74,23 @@ class OkDateTimePicker {
 ///
 class OkDateTimePickerWidget extends StatefulWidget {
 
-  OkDateTimePickerWidget({super.key,
-    required this.showItems,
+  OkDateTimePickerWidget({
+    super.key,
+    required this.displayItems,
     this.allowNullItems,
     this.initialTime,
     this.minTime,
     this.maxTime,
     this.use24hFormat = true,
+    this.useLunarCalendar = false,
     this.style = OkDateTimePickerStyle.light,
+    this.onChanged,
+    this.onConfirmed,
+    this.onCanceled,
+  }) : assert(displayItems.isNotEmpty);
 
-  }) : assert(showItems.isNotEmpty);
-
-  /// Use showItems to Control which items to display
-  final List<DateTimeItem> showItems;
+  /// Use displayItems to Control which items to display
+  final List<DateTimeItem> displayItems;
 
   /// Using allowNullItems to Control which items can be select null value
   final List<DateTimeItem>? allowNullItems;
@@ -94,11 +98,11 @@ class OkDateTimePickerWidget extends StatefulWidget {
   final DateTime? minTime;
   final DateTime? maxTime;
   final bool use24hFormat;
+  final bool useLunarCalendar;
   final OkDateTimePickerStyle style;
   final OkDateTimePickerValueCallback? onChanged;
   final OkDateTimePickerValueCallback? onConfirmed;
   final OkDateTimePickerCancelCallback? onCanceled;
-
 
   @override
   _OkDateTimePickerWidgetState createState() => _OkDateTimePickerWidgetState();
@@ -228,20 +232,14 @@ class _OkDateTimePickerWidgetState extends State<OkDateTimePickerWidget> {
     }
   }
 
-  DateTime _getSelectedDateTime() {
-    return DateTime(
-      selectedValues[0] ?? DateTime
-          .now()
-          .year,
-      selectedValues[1] ?? DateTime
-          .now()
-          .month,
-      selectedValues[2] ?? DateTime
-          .now()
-          .day,
-      selectedValues[3] ?? 0,
-      selectedValues[4] ?? 0,
-      selectedValues[5] ?? 0,
+  DateTimeEntity _getSelectedDateTime() {
+    return DateTimeEntity(
+      year: selectedValues[0],
+      month: selectedValues[1],
+      day: selectedValues[2],
+      hour: selectedValues[3],
+      minute: selectedValues[4],
+      second: selectedValues[5],
     );
   }
 
@@ -281,9 +279,7 @@ class _OkDateTimePickerWidgetState extends State<OkDateTimePickerWidget> {
     return List.generate(60, (index) => index);
   }
 
-  List<int> _
-
-  getSecondRange() {
+  List<int> _getSecondRange() {
     return List.generate(60, (index) => index);
   }
 
@@ -295,20 +291,24 @@ class _OkDateTimePickerWidgetState extends State<OkDateTimePickerWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(null),
-              child: Text('Cancel', style: widget.style.cancelButtonStyle),
+              onPressed: () {
+                if (widget.onCanceled != null) widget.onCanceled!();
+              },
+              child: Text('Cancel', style: widget.style.cancelButtonTextStyle),
             ),
             TextButton(
               onPressed: () {
-                DateTime selectedDateTime = _getSelectedDateTime();
-                Navigator.of(context).pop(selectedDateTime);
+                if (widget.onConfirmed != null) widget.onConfirmed!(_getSelectedDateTime());
               },
-              child: Text('Confirm', style: widget.style.confirmButtonStyle),
+              child: Text('Confirm', style: widget.style.confirmButtonTextStyle),
             ),
           ],
         ),
-        Row(
-          children: widget.showItems.map((item) => _buildTimeColumn(item)).toList(),
+        SizedBox(
+          height: 250,
+          child: Row(
+            children: widget.displayItems.map((item) => _buildTimeColumn(item)).toList(),
+          ),
         ),
       ],
     );
