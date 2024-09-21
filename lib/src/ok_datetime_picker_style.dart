@@ -7,7 +7,7 @@ class OkDateTimePickerStyle {
     this.selectedTextStyle,
     this.unselectedTextStyle,
     this.backgroundColor,
-    this.height = 250,
+    this.pickerHeight = 250,
   });
 
   /// The style for cancel button's [Text] widget.
@@ -25,7 +25,7 @@ class OkDateTimePickerStyle {
   /// The picker widget background color.
   final Color? backgroundColor;
 
-  final double height;
+  final double pickerHeight;
 
   static OkDateTimePickerStyle light = OkDateTimePickerStyle(
     cancelButtonTextStyle: TextStyle(color: Colors.blue, fontSize: 16),
@@ -33,7 +33,6 @@ class OkDateTimePickerStyle {
     selectedTextStyle: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
     unselectedTextStyle: TextStyle(color: Colors.grey, fontSize: 16),
     backgroundColor: Colors.white,
-    height: 250,
   );
 
   static OkDateTimePickerStyle dark = OkDateTimePickerStyle(
@@ -42,7 +41,6 @@ class OkDateTimePickerStyle {
     selectedTextStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
     unselectedTextStyle: TextStyle(color: Colors.grey, fontSize: 16),
     backgroundColor: Colors.black,
-    height: 250,
   );
 
   OkDateTimePickerStyle copyWith({
@@ -51,7 +49,7 @@ class OkDateTimePickerStyle {
     TextStyle? selectedTextStyle,
     TextStyle? unselectedTextStyle,
     Color? backgroundColor,
-    double? height,
+    double? pickerHeight,
   }) {
     return OkDateTimePickerStyle(
       cancelButtonTextStyle: cancelButtonTextStyle ?? this.cancelButtonTextStyle,
@@ -59,7 +57,7 @@ class OkDateTimePickerStyle {
       selectedTextStyle: selectedTextStyle ?? this.selectedTextStyle,
       unselectedTextStyle: unselectedTextStyle ?? this.unselectedTextStyle,
       backgroundColor: backgroundColor ?? this.backgroundColor,
-      height: height ?? this.height,
+      pickerHeight: pickerHeight ?? this.pickerHeight,
     );
   }
 }
