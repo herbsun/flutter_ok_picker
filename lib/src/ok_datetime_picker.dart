@@ -143,21 +143,18 @@ class OkDateTimePickerWidget extends StatefulWidget {
 class _OkDateTimePickerWidgetState extends State<OkDateTimePickerWidget> {
   DateTimeEntity selectedDateTime = DateTimeEntity();
 
-  late FixedExtentScrollController yearController;
-  late FixedExtentScrollController monthController;
-  late FixedExtentScrollController dayController;
-  late FixedExtentScrollController hourController;
-  late FixedExtentScrollController minuteController;
-  late FixedExtentScrollController secondController;
-  late FixedExtentScrollController amPmController;
+  FixedExtentScrollController yearController = FixedExtentScrollController();
+  FixedExtentScrollController monthController = FixedExtentScrollController();
+  FixedExtentScrollController dayController = FixedExtentScrollController();
+  FixedExtentScrollController hourController = FixedExtentScrollController();
+  FixedExtentScrollController minuteController = FixedExtentScrollController();
+  FixedExtentScrollController secondController = FixedExtentScrollController();
+  FixedExtentScrollController amPmController = FixedExtentScrollController();
 
   @override
   void initState() {
     super.initState();
-
-    if (widget.initialTime != null) {
-      // selectedDateTime = DateTimeEntity.fromDateTime(widget.initialTime!);
-    }
+    selectedDateTime = DateTimeEntity.fromDateTime(widget.initialTime ?? DateTime.now());
   }
 
   @override
@@ -177,41 +174,44 @@ class _OkDateTimePickerWidgetState extends State<OkDateTimePickerWidget> {
       case DateTimeItem.year:
         int itemValue = _getYearRange()[index]['itemValue'];
         selectedDateTime.year = itemValue == -1 ? null : itemValue;
+        selectedDateTime.lunarYearName = itemValue == -1 ? null : getLunarYearName(itemValue);
         break;
       case DateTimeItem.month:
         int itemValue = _getMonthRange()[index]['itemValue'];
         selectedDateTime.month = itemValue == -1 ? null : itemValue;
+        selectedDateTime.lunarMonthName = itemValue == -1 ? null : getLunarMonthName(itemValue);
         break;
       case DateTimeItem.day:
         int itemValue = _getDayRange()[index]['itemValue'];
         selectedDateTime.day = itemValue == -1 ? null : itemValue;
+        selectedDateTime.lunarDayName = itemValue == -1 ? null : getLunarDayName(itemValue);
         break;
       case DateTimeItem.hour:
-        // TODO: Handle this case.
+        int itemValue = _getHourRange()[index]['itemValue'];
+        selectedDateTime.hour = itemValue == -1 ? null : itemValue;
         break;
       case DateTimeItem.minute:
-        // TODO: Handle this case.
+        int itemValue = _getMinuteRange()[index]['itemValue'];
+        selectedDateTime.minute = itemValue == -1 ? null : itemValue;
         break;
       case DateTimeItem.second:
-        // TODO: Handle this case.
+        int itemValue = _getSecondRange()[index]['itemValue'];
+        selectedDateTime.second = itemValue == -1 ? null : itemValue;
         break;
     }
     if (selectedDateTime.day != null && selectedDateTime.day! > 28) {
-      if (widget.useLunarCalendar) {
-      } else {
-        if (widget.displayItems.contains(DateTimeItem.month) && widget.displayItems.contains(DateTimeItem.day)) {
-          if (selectedDateTime.month != null && selectedDateTime.day != null) {
-            int maxDays = getDays(month: selectedDateTime.month!, year: selectedDateTime.year);
-            if (selectedDateTime.day! > maxDays) {
-              selectedDateTime.day = maxDays;
-              Future.delayed(const Duration(milliseconds: 500), () {
-                dayController.animateToItem(
-                  maxDays - 1,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.fastOutSlowIn,
-                );
-              });
-            }
+      if (widget.displayItems.contains(DateTimeItem.month) && widget.displayItems.contains(DateTimeItem.day)) {
+        if (selectedDateTime.month != null && selectedDateTime.day != null) {
+          int maxDays = getDays(month: selectedDateTime.month!, year: selectedDateTime.year);
+          if (selectedDateTime.day! > maxDays) {
+            selectedDateTime.day = maxDays;
+            Future.delayed(const Duration(milliseconds: 500), () {
+              dayController.animateToItem(
+                maxDays - 1,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.fastOutSlowIn,
+              );
+            });
           }
         }
       }
@@ -230,10 +230,6 @@ class _OkDateTimePickerWidgetState extends State<OkDateTimePickerWidget> {
       return false;
     }
     return true;
-  }
-
-  void _adjustToValidValue(int index) {
-    // 自动调整为合法的值
   }
 
   List<Map> _getYearRange() {
@@ -420,7 +416,6 @@ class _OkDateTimePickerWidgetState extends State<OkDateTimePickerWidget> {
           // );
         }).toList(),
         onSelectedItemChanged: (int index) {
-          print('onSelectedItemChanged $item $index');
           _onDateTimeChanged(item, index);
         },
       ),
@@ -441,13 +436,13 @@ class _OkDateTimePickerWidgetState extends State<OkDateTimePickerWidget> {
                 onPressed: () {
                   widget.onCanceled?.call();
                 },
-                child: Text('Cancel', style: widget.style?.cancelButtonTextStyle),
+                child: Text('取消', style: widget.style?.cancelButtonTextStyle),
               ),
               TextButton(
                 onPressed: () {
                   widget.onConfirmed?.call(_getSelectedDateTime());
                 },
-                child: Text('Confirm', style: widget.style?.confirmButtonTextStyle),
+                child: Text('确认', style: widget.style?.confirmButtonTextStyle),
               ),
             ],
           ),

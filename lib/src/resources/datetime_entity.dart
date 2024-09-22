@@ -1,3 +1,4 @@
+import 'datetime_utils.dart';
 
 class DateTimeEntity {
   int? year;
@@ -11,9 +12,6 @@ class DateTimeEntity {
   String? lunarYearName;
   String? lunarMonthName;
   String? lunarDayName;
-  String? lunarHourName;
-  String? lunarMinuteName;
-  String? lunarSecondName;
   String? zodiac;
 
 
@@ -26,13 +24,9 @@ class DateTimeEntity {
     this.minute,
     this.second,
     this.horoscope,
-
     this.lunarYearName,
     this.lunarMonthName,
     this.lunarDayName,
-    this.lunarHourName,
-    this.lunarMinuteName,
-    this.lunarSecondName,
     this.zodiac,
   });
 
@@ -43,6 +37,9 @@ class DateTimeEntity {
     hour: dateTime.hour,
     minute: dateTime.minute,
     second: dateTime.second,
+    lunarYearName: getLunarYearName(dateTime.year),
+    lunarMonthName: getLunarMonthName(dateTime.month),
+    lunarDayName: getLunarDayName(dateTime.day),
   );
   
 }
