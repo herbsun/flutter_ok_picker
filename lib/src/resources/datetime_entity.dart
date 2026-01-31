@@ -7,7 +7,7 @@ class DateTimeEntity {
   int? hour;
   int? minute;
   int? second;
-  String? horoscope;
+  String? horoscope; // 星座
 
   String? lunarYearName;
   String? lunarMonthName;

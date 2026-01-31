@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OkDateTimePickerStyle {
-  OkDateTimePickerStyle({
+  const OkDateTimePickerStyle({
     this.cancelButtonTextStyle,
     this.confirmButtonTextStyle,
     this.selectedTextStyle,
@@ -27,7 +27,7 @@ class OkDateTimePickerStyle {
 
   final double pickerHeight;
 
-  static OkDateTimePickerStyle light = OkDateTimePickerStyle(
+  static const OkDateTimePickerStyle light = OkDateTimePickerStyle(
     cancelButtonTextStyle: TextStyle(color: Colors.blue, fontSize: 16),
     confirmButtonTextStyle: TextStyle(color: Colors.blue, fontSize: 16),
     selectedTextStyle: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
@@ -35,7 +35,7 @@ class OkDateTimePickerStyle {
     backgroundColor: Colors.white,
   );
 
-  static OkDateTimePickerStyle dark = OkDateTimePickerStyle(
+  static const OkDateTimePickerStyle dark = OkDateTimePickerStyle(
     cancelButtonTextStyle: TextStyle(color: Colors.white, fontSize: 16),
     confirmButtonTextStyle: TextStyle(color: Colors.white, fontSize: 16),
     selectedTextStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),

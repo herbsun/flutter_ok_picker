@@ -11,8 +11,21 @@ String getLunarYearName(int year) {
   return s;
 }
 
-String getLunarMonthName(int month) => (month < 0 ? '闰' : '') + LunarUtil.MONTH[month.abs()];
-String getLunarDayName(int day) => (day < 0 ? '闰' : '') + LunarUtil.DAY[day.abs()];
+String getLunarMonthName(int month) {
+  int absMonth = month.abs();
+  if (absMonth > 0 && absMonth < LunarUtil.MONTH.length) {
+    return (month < 0 ? '闰' : '') + LunarUtil.MONTH[absMonth];
+  }
+  return '$month';
+}
+
+String getLunarDayName(int day) {
+  int absDay = day.abs();
+  if (absDay > 0 && absDay < LunarUtil.DAY.length) {
+    return (day < 0 ? '闰' : '') + LunarUtil.DAY[absDay];
+  }
+  return '$day';
+}
 
 int getDays({required int month, int? year}) {
   List<int> leapYearMonths = const <int>[1, 3, 5, 7, 8, 10, 12];

@@ -1,5 +1,5 @@
 name: flutter_ok_picker
-description: "A new Flutter package that ."
+description: A customizable Flutter date and time picker with support for lunar calendar and various display formats.
 version: 0.0.1
 homepage:
 
@@ -16,5 +16,3 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
-
-flutter: null
